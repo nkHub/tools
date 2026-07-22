@@ -1,0 +1,92 @@
+/* 全局 Toast：右上角堆叠，动画淡入上滑 */
+
+.toast-viewport {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  pointer-events: none;
+  max-width: min(360px, calc(100vw - 2rem));
+}
+
+.toast-item {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.7rem 0.95rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--surface) 92%, #000);
+  box-shadow: 0 12px 32px rgba(2, 6, 23, 0.45);
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  animation: toast-in 0.22s ease-out;
+  backdrop-filter: blur(10px);
+}
+
+.toast-icon {
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-size: 0.75rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.toast-success {
+  border-color: rgba(74, 222, 128, 0.35);
+}
+
+.toast-success .toast-icon {
+  background: rgba(74, 222, 128, 0.2);
+  color: #86efac;
+}
+
+.toast-error {
+  border-color: rgba(248, 113, 113, 0.4);
+}
+
+.toast-error .toast-icon {
+  background: rgba(248, 113, 113, 0.2);
+  color: #fca5a5;
+}
+
+.toast-info {
+  border-color: rgba(56, 189, 248, 0.35);
+}
+
+.toast-info .toast-icon {
+  background: rgba(56, 189, 248, 0.2);
+  color: #7dd3fc;
+}
+
+.toast-text {
+  line-height: 1.35;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 640px) {
+  .toast-viewport {
+    left: 1rem;
+    right: 1rem;
+    max-width: none;
+  }
+}

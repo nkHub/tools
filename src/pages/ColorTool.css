@@ -1,0 +1,196 @@
+/* 颜色代码转换页：预览、滑块、输入行 */
+
+.color-input-bar {
+  width: 100%;
+}
+
+.color-input-field {
+  flex: 1;
+  min-width: 0;
+}
+
+.color-input-row {
+  display: flex;
+  gap: 0.55rem;
+  align-items: stretch;
+}
+
+.color-input-row input[type='text'] {
+  flex: 1;
+  min-width: 0;
+}
+
+.color-swatch-btn {
+  position: relative;
+  width: 2.75rem;
+  flex-shrink: 0;
+  border-radius: 0.7rem;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  cursor: pointer;
+  background:
+    linear-gradient(45deg, #1e293b 25%, transparent 25%),
+    linear-gradient(-45deg, #1e293b 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #1e293b 75%),
+    linear-gradient(-45deg, transparent 75%, #1e293b 75%);
+  background-size: 10px 10px;
+  background-position: 0 0, 0 5px, 5px -5px, -5px 0;
+  background-color: #0f172a;
+}
+
+.color-swatch-btn input[type='color'] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  border: none;
+  padding: 0;
+}
+
+.color-swatch-btn > span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 2.6rem;
+  pointer-events: none;
+}
+
+.color-preview-stage {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.color-preview-checker {
+  height: 160px;
+  border-radius: 0.9rem;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  background:
+    linear-gradient(45deg, #1e293b 25%, transparent 25%),
+    linear-gradient(-45deg, #1e293b 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #1e293b 75%),
+    linear-gradient(-45deg, transparent 75%, #1e293b 75%);
+  background-size: 16px 16px;
+  background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+  background-color: #0f172a;
+}
+
+.color-preview-fill {
+  width: 100%;
+  height: 100%;
+}
+
+.color-preview-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.color-preview-meta span {
+  font-size: 0.78rem;
+  color: var(--muted);
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.color-sliders {
+  display: grid;
+  gap: 0.7rem;
+  margin-top: 1rem;
+}
+
+.color-slider {
+  display: grid;
+  grid-template-columns: 1.4rem 1fr 4.2rem;
+  gap: 0.55rem;
+  align-items: center;
+}
+
+.color-slider > span {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.color-slider input[type='range'] {
+  width: 100%;
+  accent-color: #38bdf8;
+}
+
+.color-slider input[type='number'] {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 0.55rem;
+  background: var(--surface-2);
+  color: var(--text);
+  padding: 0.4rem 0.45rem;
+  font: inherit;
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  outline: none;
+}
+
+.color-slider input[type='number']:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.18);
+}
+
+/* 色相滑块：彩虹渐变轨道 */
+.hue-range {
+  background: linear-gradient(
+    to right,
+    #ff0000 0%,
+    #ffff00 17%,
+    #00ff00 33%,
+    #00ffff 50%,
+    #0000ff 67%,
+    #ff00ff 83%,
+    #ff0000 100%
+  );
+  border-radius: 999px;
+  height: 0.45rem;
+  appearance: none;
+}
+
+.hue-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #0f172a;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+}
+
+.color-hint {
+  margin: 0.85rem 0 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.color-format-hint {
+  display: block;
+  font-weight: 400;
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin-top: 0.15rem;
+}
+
+@media (max-width: 640px) {
+  .color-input-row {
+    flex-wrap: wrap;
+  }
+
+  .color-input-row input[type='text'] {
+    flex: 1 1 100%;
+  }
+}

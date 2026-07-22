@@ -1,0 +1,70 @@
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { Layout } from './components/Layout'
+import { Home } from './pages/Home'
+import { JsonTool } from './pages/JsonTool'
+import { YamlTool } from './pages/YamlTool'
+import { Base64Tool } from './pages/Base64Tool'
+import { Base64ImageTool } from './pages/Base64ImageTool'
+import { UrlTool } from './pages/UrlTool'
+import { RadixTool } from './pages/RadixTool'
+import { ColorTool } from './pages/ColorTool'
+import { PaletteTool } from './pages/PaletteTool'
+import { RegexTool } from './pages/RegexTool'
+import { MarkdownTool } from './pages/MarkdownTool'
+import { CronTool } from './pages/CronTool'
+import { QrcodeTool } from './pages/QrcodeTool'
+import { ImageTool } from './pages/ImageTool'
+import { SvgTool } from './pages/SvgTool'
+import { CssBoxTool } from './pages/CssBoxTool'
+import { CryptoTool } from './pages/CryptoTool'
+import { HashTool } from './pages/HashTool'
+import { JwtTool } from './pages/JwtTool'
+import { MimeTool } from './pages/MimeTool'
+import { TimezoneTool } from './pages/TimezoneTool'
+import { PasswordTool } from './pages/PasswordTool'
+import { GuidTool } from './pages/GuidTool'
+import { FingerprintTool } from './pages/FingerprintTool'
+import { TimestampTool } from './pages/TimestampTool'
+import { IpTool } from './pages/IpTool'
+
+/**
+ * 应用路由入口
+ * 所有页面嵌套在 Layout 中，统一导航与页脚
+ */
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="json" element={<JsonTool />} />
+          <Route path="yaml" element={<YamlTool />} />
+          <Route path="base64" element={<Base64Tool />} />
+          <Route path="base64-image" element={<Base64ImageTool />} />
+          <Route path="url" element={<UrlTool />} />
+          <Route path="radix" element={<RadixTool />} />
+          <Route path="color" element={<ColorTool />} />
+          <Route path="palette" element={<PaletteTool />} />
+          <Route path="regex" element={<RegexTool />} />
+          <Route path="markdown" element={<MarkdownTool />} />
+          <Route path="cron" element={<CronTool />} />
+          <Route path="qrcode" element={<QrcodeTool />} />
+          <Route path="image" element={<ImageTool />} />
+          <Route path="svg" element={<SvgTool />} />
+          <Route path="css-box" element={<CssBoxTool />} />
+          <Route path="hash" element={<HashTool />} />
+          <Route path="jwt" element={<JwtTool />} />
+          <Route path="mime" element={<MimeTool />} />
+          <Route path="timezone" element={<TimezoneTool />} />
+          <Route path="crypto" element={<CryptoTool />} />
+          <Route path="password" element={<PasswordTool />} />
+          <Route path="guid" element={<GuidTool />} />
+          <Route path="fingerprint" element={<FingerprintTool />} />
+          <Route path="timestamp" element={<TimestampTool />} />
+          <Route path="ip" element={<IpTool />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  )
+}

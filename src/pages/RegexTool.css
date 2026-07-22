@@ -1,0 +1,80 @@
+/* 正则测试：模式行与高亮 */
+
+.regex-pattern-row {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 0.35rem 0.55rem;
+}
+
+.regex-slash {
+  color: var(--muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-weight: 700;
+  user-select: none;
+}
+
+.regex-pattern-input {
+  flex: 1;
+  min-width: 0;
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0.45rem 0.25rem !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.9rem;
+  color: var(--text);
+  outline: none;
+}
+
+.regex-flags-input {
+  width: 4.5rem;
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0.45rem 0.25rem !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.9rem;
+  color: #67e8f9;
+  outline: none;
+}
+
+.regex-highlight {
+  min-height: 280px;
+  border: 1px solid var(--border);
+  border-radius: 0.7rem;
+  background: var(--surface-2);
+  padding: 0.85rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.875rem;
+  line-height: 1.65;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow: auto;
+}
+
+.regex-mark {
+  background: rgba(56, 189, 248, 0.35);
+  color: var(--text);
+  border-radius: 0.25rem;
+  padding: 0.05rem 0.15rem;
+  box-decoration-break: clone;
+}
+
+.regex-meta {
+  display: block;
+  font-weight: 400;
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin-top: 0.15rem;
+}
+
+.regex-groups {
+  margin-top: 0.35rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+  word-break: break-all;
+}

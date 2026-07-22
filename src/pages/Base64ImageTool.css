@@ -1,0 +1,79 @@
+/* Base64 图片互转：拖拽区与预览 */
+
+.img-dropzone {
+  min-height: 280px;
+  border: 1.5px dashed var(--border);
+  border-radius: 0.9rem;
+  background: var(--surface-2);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+  padding: 1rem;
+  overflow: hidden;
+}
+
+.img-dropzone:hover,
+.img-dropzone.drag-over {
+  border-color: color-mix(in srgb, #38bdf8 55%, var(--border));
+  background: color-mix(in srgb, #38bdf8 8%, var(--surface-2));
+}
+
+.img-drop-hint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  text-align: center;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.img-drop-hint strong {
+  color: var(--text);
+  font-size: 1rem;
+}
+
+.img-drop-hint span {
+  font-size: 0.85rem;
+}
+
+.img-preview-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  max-height: 420px;
+}
+
+.img-preview {
+  max-width: 100%;
+  max-height: 340px;
+  object-fit: contain;
+  border-radius: 0.5rem;
+  background:
+    linear-gradient(45deg, #1e293b 25%, transparent 25%),
+    linear-gradient(-45deg, #1e293b 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #1e293b 75%),
+    linear-gradient(-45deg, transparent 75%, #1e293b 75%);
+  background-size: 16px 16px;
+  background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+  background-color: #0f172a;
+}
+
+.img-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.img-meta span {
+  font-size: 0.78rem;
+  color: var(--muted);
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
