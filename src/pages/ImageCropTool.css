@@ -1,0 +1,102 @@
+.crop-stage {
+  min-height: 320px;
+  border: 1px solid var(--border);
+  border-radius: 0.85rem;
+  background: #0a0f18;
+  overflow: auto;
+  padding: 0.75rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.crop-stage.is-over {
+  outline: 2px dashed rgba(56, 189, 248, 0.55);
+}
+
+.crop-canvas-wrap {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  line-height: 0;
+  user-select: none;
+  touch-action: none;
+}
+
+.crop-source-img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  pointer-events: none;
+}
+
+.crop-box {
+  position: absolute;
+  box-sizing: border-box;
+  border: 2px solid #38bdf8;
+  box-shadow: 0 0 0 9999px rgba(2, 6, 23, 0.55);
+  cursor: move;
+  overflow: visible;
+}
+
+.crop-handle {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: #e0f2fe;
+  border: 2px solid #0284c7;
+  border-radius: 2px;
+  box-sizing: border-box;
+}
+
+.crop-handle.nw {
+  left: -7px;
+  top: -7px;
+  cursor: nwse-resize;
+}
+
+.crop-handle.ne {
+  right: -7px;
+  top: -7px;
+  cursor: nesw-resize;
+}
+
+.crop-handle.sw {
+  left: -7px;
+  bottom: -7px;
+  cursor: nesw-resize;
+}
+
+.crop-handle.se {
+  right: -7px;
+  bottom: -7px;
+  cursor: nwse-resize;
+}
+
+.crop-result {
+  min-height: 280px;
+  border-radius: 0.85rem;
+  border: 1px solid var(--border);
+  background:
+    linear-gradient(45deg, #1e293b 25%, transparent 25%),
+    linear-gradient(-45deg, #1e293b 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #1e293b 75%),
+    linear-gradient(-45deg, transparent 75%, #1e293b 75%);
+  background-size: 16px 16px;
+  background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+  background-color: #0f172a;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  overflow: auto;
+}
+
+.crop-result img {
+  max-width: 100%;
+  max-height: min(60vh, 520px);
+  object-fit: contain;
+}
+
+.crop-controls {
+  align-items: start;
+}

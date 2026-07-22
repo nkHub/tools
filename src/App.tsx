@@ -13,10 +13,13 @@ import { PaletteTool } from './pages/PaletteTool'
 import { ImageColorTool } from './pages/ImageColorTool'
 import { GradientTool } from './pages/GradientTool'
 import { RegexTool } from './pages/RegexTool'
+import { UnicodeTool } from './pages/UnicodeTool'
 import { MarkdownTool } from './pages/MarkdownTool'
 import { CronTool } from './pages/CronTool'
 import { QrcodeTool } from './pages/QrcodeTool'
 import { ImageTool } from './pages/ImageTool'
+import { FaviconTool } from './pages/FaviconTool'
+import { ImageCropTool } from './pages/ImageCropTool'
 import { SvgTool } from './pages/SvgTool'
 import { CssBoxTool } from './pages/CssBoxTool'
 import { CryptoTool } from './pages/CryptoTool'
@@ -29,6 +32,7 @@ import { GuidTool } from './pages/GuidTool'
 import { FingerprintTool } from './pages/FingerprintTool'
 import { TimestampTool } from './pages/TimestampTool'
 import { IpTool } from './pages/IpTool'
+import { PortTool } from './pages/PortTool'
 
 /**
  * 应用路由入口
@@ -52,10 +56,13 @@ export default function App() {
           <Route path="image-color" element={<ImageColorTool />} />
           <Route path="gradient" element={<GradientTool />} />
           <Route path="regex" element={<RegexTool />} />
+          <Route path="unicode" element={<UnicodeTool />} />
           <Route path="markdown" element={<MarkdownTool />} />
           <Route path="cron" element={<CronTool />} />
           <Route path="qrcode" element={<QrcodeTool />} />
           <Route path="image" element={<ImageTool />} />
+          <Route path="favicon" element={<FaviconTool />} />
+          <Route path="image-crop" element={<ImageCropTool />} />
           <Route path="svg" element={<SvgTool />} />
           <Route path="css-box" element={<CssBoxTool />} />
           <Route path="hash" element={<HashTool />} />
@@ -68,6 +75,7 @@ export default function App() {
           <Route path="fingerprint" element={<FingerprintTool />} />
           <Route path="timestamp" element={<TimestampTool />} />
           <Route path="ip" element={<IpTool />} />
+          <Route path="ports" element={<PortTool />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>

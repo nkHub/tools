@@ -1,10 +1,12 @@
 import type { LucideIcon, LucideProps } from 'lucide-react'
 import {
+  AppWindow,
   Binary,
   Blend,
   Box,
   Braces,
   Calculator,
+  CaseSensitive,
   Check,
   ChevronDown,
   ChevronLeft,
@@ -12,6 +14,7 @@ import {
   ChevronUp,
   CircleAlert,
   Clock,
+  Crop,
   FileCode2,
   FileText,
   FileType,
@@ -27,6 +30,7 @@ import {
   Lock,
   Maximize2,
   Minimize2,
+  Network,
   Package,
   Palette,
   Pipette,
@@ -76,6 +80,10 @@ export type ToolIconName =
   | 'wrench'
   | 'box'
   | 'layers'
+  | 'app-window'
+  | 'crop'
+  | 'network'
+  | 'case-sensitive'
 
 const TOOL_ICON_MAP: Record<ToolIconName, LucideIcon> = {
   braces: Braces,
@@ -109,6 +117,10 @@ const TOOL_ICON_MAP: Record<ToolIconName, LucideIcon> = {
   wrench: Wrench,
   box: Box,
   layers: Layers,
+  'app-window': AppWindow,
+  crop: Crop,
+  network: Network,
+  'case-sensitive': CaseSensitive,
 }
 
 /** 通用 UI 图标（Toast / 导航 / 控件） */

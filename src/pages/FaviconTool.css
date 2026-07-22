@@ -1,0 +1,101 @@
+.favicon-drop {
+  margin-top: 0.85rem;
+  min-height: 160px;
+  border: 1px dashed var(--border);
+  border-radius: 0.9rem;
+  background: var(--surface-2);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  padding: 1rem;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.favicon-drop.is-over,
+.favicon-drop:hover {
+  border-color: color-mix(in srgb, #38bdf8 50%, var(--border));
+  background: color-mix(in srgb, rgba(56, 189, 248, 0.08) 60%, var(--surface-2));
+}
+
+.favicon-source-preview {
+  max-width: min(240px, 100%);
+  max-height: 180px;
+  object-fit: contain;
+  border-radius: 0.5rem;
+}
+
+.favicon-size-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.favicon-size-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  font-size: 0.85rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.favicon-size-chip input {
+  accent-color: #38bdf8;
+}
+
+.favicon-export-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 0.75rem;
+}
+
+.favicon-export-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 0.85rem;
+  background: var(--surface-2);
+  text-align: center;
+}
+
+.favicon-export-preview {
+  display: grid;
+  place-items: center;
+  min-height: 88px;
+  background:
+    linear-gradient(45deg, #1e293b 25%, transparent 25%),
+    linear-gradient(-45deg, #1e293b 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #1e293b 75%),
+    linear-gradient(-45deg, transparent 75%, #1e293b 75%);
+  background-size: 12px 12px;
+  background-position: 0 0, 0 6px, 6px -6px, -6px 0;
+  background-color: #0f172a;
+  border-radius: 0.5rem;
+  padding: 0.4rem;
+}
+
+.favicon-export-card strong {
+  font-size: 0.85rem;
+}
+
+.favicon-snippet {
+  margin: 0;
+  padding: 0.85rem;
+  border-radius: 0.7rem;
+  background: #0a0f18;
+  border: 1px solid var(--border);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.8rem;
+  line-height: 1.55;
+  color: #e2e8f0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow: auto;
+}

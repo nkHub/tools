@@ -1,0 +1,120 @@
+.port-quick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.75rem;
+}
+
+.port-chip {
+  padding: 0.3rem 0.65rem !important;
+  font-size: 0.8rem !important;
+  border-radius: 999px !important;
+}
+
+.port-exact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  align-items: center;
+  margin-top: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: 0.75rem;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+}
+
+.port-table-wrap {
+  overflow: auto;
+  max-height: min(70vh, 640px);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+}
+
+.port-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.port-table th,
+.port-table td {
+  padding: 0.55rem 0.7rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.port-table th {
+  position: sticky;
+  top: 0;
+  background: var(--surface-2);
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 0.8rem;
+  z-index: 1;
+}
+
+.port-table tbody tr:hover {
+  background: rgba(56, 189, 248, 0.06);
+}
+
+.port-num {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-weight: 700;
+  color: #7dd3fc;
+  white-space: nowrap;
+}
+
+.port-proto {
+  display: inline-block;
+  font-size: 0.75rem;
+  padding: 0.12rem 0.4rem;
+  border-radius: 0.35rem;
+  background: rgba(129, 140, 248, 0.15);
+  color: #c7d2fe;
+  white-space: nowrap;
+}
+
+.port-service {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.port-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.port-tag {
+  appearance: none;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.72rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.port-tag:hover {
+  color: #7dd3fc;
+  border-color: rgba(56, 189, 248, 0.45);
+}
+
+.port-actions {
+  white-space: nowrap;
+  text-align: right;
+}
+
+.port-actions .btn {
+  padding: 0.3rem 0.5rem;
+  font-size: 0.75rem;
+}
+
+@media (max-width: 860px) {
+  .port-table th:nth-child(5),
+  .port-table td:nth-child(5) {
+    display: none;
+  }
+}

@@ -117,6 +117,14 @@ export const tools: ToolItem[] = [
     icon: 'regex',
   },
   {
+    path: '/unicode',
+    name: 'Unicode / HTML 实体',
+    shortName: 'Unicode',
+    description: '实体编解码、转义与码点检视',
+    category: '文本处理',
+    icon: 'case-sensitive',
+  },
+  {
     path: '/markdown',
     name: 'Markdown 预览',
     shortName: 'MD',
@@ -147,6 +155,22 @@ export const tools: ToolItem[] = [
     description: 'Canvas 改尺寸、压缩与格式导出',
     category: '设计开发',
     icon: 'image-down',
+  },
+  {
+    path: '/favicon',
+    name: 'Favicon 多尺寸',
+    shortName: 'Favicon',
+    description: '导出 favicon / PWA 多尺寸 PNG',
+    category: '设计开发',
+    icon: 'app-window',
+  },
+  {
+    path: '/image-crop',
+    name: '图片裁剪 / 圆角',
+    shortName: '裁剪',
+    description: '拖拽裁剪、圆角与圆形蒙版导出',
+    category: '设计开发',
+    icon: 'crop',
   },
   {
     path: '/svg',
@@ -243,6 +267,14 @@ export const tools: ToolItem[] = [
     description: '浏览器环境信息与公网 IP 查询',
     category: '网络信息',
     icon: 'wifi',
+  },
+  {
+    path: '/ports',
+    name: '端口 / 服务速查',
+    shortName: '端口',
+    description: '常见 TCP/UDP 端口与服务对照',
+    category: '网络信息',
+    icon: 'network',
   },
 ]
 
