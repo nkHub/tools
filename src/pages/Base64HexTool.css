@@ -1,0 +1,64 @@
+/* Base64 / Hex 文件互转 */
+
+.b64hex-drop {
+  min-height: 180px;
+  border: 1.5px dashed var(--border);
+  border-radius: 0.9rem;
+  background: var(--surface-2);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.b64hex-drop:hover,
+.b64hex-drop.drag-over {
+  border-color: color-mix(in srgb, #38bdf8 55%, var(--border));
+  background: color-mix(in srgb, #38bdf8 8%, var(--surface-2));
+}
+
+.b64hex-drop .img-drop-hint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  text-align: center;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.b64hex-drop .img-drop-hint strong {
+  color: var(--text);
+  font-size: 1rem;
+  word-break: break-all;
+}
+
+.b64hex-drop .img-drop-hint span {
+  font-size: 0.85rem;
+}
+
+.b64hex-download-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.b64hex-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.875rem;
+  color: var(--muted);
+  user-select: none;
+  cursor: pointer;
+}
+
+.b64hex-check input {
+  accent-color: #38bdf8;
+}
+
+.b64hex-textarea {
+  min-height: 320px;
+}

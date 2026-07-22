@@ -1,0 +1,97 @@
+/* JSON 工具：左右面板固定同高，内容区内滚动 */
+
+.json-split {
+  align-items: stretch;
+}
+
+.json-split > .panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  /* 两侧同一固定高度，小屏略收紧 */
+  height: min(70vh, 720px);
+}
+
+.json-input-panel .field {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.json-input-panel .code-area {
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+  resize: none;
+  overflow: auto;
+}
+
+.json-input-panel .json-panel-status {
+  flex-shrink: 0;
+  margin: 0.65rem 0 0;
+  min-height: 1.25rem;
+}
+
+.json-viewer-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  min-height: 0;
+}
+
+.json-viewer-panel .panel-head,
+.json-viewer-panel .json-search-bar,
+.json-viewer-panel > .status-info {
+  flex-shrink: 0;
+}
+
+/* 树 / 文本 / 空状态：占满剩余高度并滚动 */
+.json-viewer-panel .json-tree,
+.json-viewer-panel .json-raw-view {
+  flex: 1;
+  min-height: 0;
+  max-height: none;
+  height: auto;
+}
+
+.json-fs-btn-label {
+  margin-left: 0.3rem;
+}
+
+/* 可视化全屏：铺满视口，保留工具栏与搜索 */
+.json-viewer-panel.is-fullscreen {
+  position: fixed;
+  inset: 0.75rem;
+  z-index: 80;
+  width: auto;
+  height: auto;
+  max-height: none;
+  border-radius: 1rem;
+  box-shadow: 0 24px 64px rgba(2, 6, 23, 0.55);
+  background: var(--surface);
+}
+
+.json-viewer-panel.is-fullscreen::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: rgba(2, 6, 23, 0.62);
+  backdrop-filter: blur(4px);
+}
+
+@media (max-width: 860px) {
+  .json-split > .panel {
+    height: min(60vh, 560px);
+  }
+
+  .json-viewer-panel.is-fullscreen {
+    inset: 0.4rem;
+    border-radius: 0.75rem;
+  }
+
+  .json-fs-btn-label {
+    display: none;
+  }
+}

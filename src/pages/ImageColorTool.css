@@ -1,0 +1,245 @@
+/* 图片取色：画布、放大镜、色板 */
+
+.img-color-stage {
+  position: relative;
+  min-height: 320px;
+  border: 1.5px dashed var(--border);
+  border-radius: 0.9rem;
+  background: var(--surface-2);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+  user-select: none;
+  touch-action: none;
+}
+
+.img-color-stage.has-image {
+  border-style: solid;
+  cursor: crosshair;
+  background:
+    linear-gradient(45deg, #1e293b 25%, transparent 25%),
+    linear-gradient(-45deg, #1e293b 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #1e293b 75%),
+    linear-gradient(-45deg, transparent 75%, #1e293b 75%);
+  background-size: 16px 16px;
+  background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+  background-color: #0f172a;
+}
+
+.img-color-stage.drag-over {
+  border-color: color-mix(in srgb, #38bdf8 55%, var(--border));
+  background: color-mix(in srgb, #38bdf8 8%, var(--surface-2));
+}
+
+.img-color-canvas {
+  display: block;
+  max-width: 100%;
+  max-height: 480px;
+  width: auto;
+  height: auto;
+  cursor: crosshair;
+  z-index: 1;
+}
+
+.img-color-canvas.is-empty {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.img-color-stage .img-drop-hint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  text-align: center;
+  color: var(--muted);
+  pointer-events: none;
+  padding: 1rem;
+}
+
+.img-color-stage .img-drop-hint strong {
+  color: var(--text);
+  font-size: 1rem;
+}
+
+.img-color-stage .img-drop-hint span {
+  font-size: 0.85rem;
+}
+
+.img-color-crosshair {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  margin: -7px 0 0 -7px;
+  border: 2px solid #fff;
+  border-radius: 999px;
+  box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.75);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.img-color-loupe {
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  border-radius: 999px;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 8px 24px rgba(2, 6, 23, 0.45);
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 3;
+  background: #0f172a;
+}
+
+.img-color-loupe img {
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  display: block;
+}
+
+.img-color-preview {
+  min-height: 96px;
+  border-radius: 0.85rem;
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: 0.2rem;
+  padding: 0.9rem 1rem;
+}
+
+.img-color-preview strong {
+  font-size: 1.25rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  letter-spacing: 0.02em;
+}
+
+.img-color-preview span {
+  font-size: 0.8rem;
+  opacity: 0.85;
+}
+
+.img-color-palette {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(104px, 1fr));
+  gap: 0.55rem;
+}
+
+.img-color-swatch-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.img-color-swatch {
+  appearance: none;
+  border: 1px solid var(--border);
+  border-radius: 0.85rem;
+  min-height: 88px;
+  width: 100%;
+  cursor: pointer;
+  display: flex;
+  align-items: flex-end;
+  padding: 0.55rem;
+  transition: transform 0.12s ease;
+}
+
+.img-color-swatch:hover {
+  transform: translateY(-2px);
+}
+
+.img-color-swatch-link {
+  font-size: 0.75rem;
+  text-align: center;
+  color: #7dd3fc;
+  text-decoration: none;
+}
+
+.img-color-swatch-link:hover {
+  text-decoration: underline;
+}
+
+a.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.img-color-swatch-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  text-align: left;
+}
+
+.img-color-swatch-label small {
+  font-weight: 600;
+  opacity: 0.85;
+}
+
+.img-color-history {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.img-color-history-dot {
+  appearance: none;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.35rem 0.65rem 0.35rem 0.4rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: 0.78rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.img-color-history-dot::before {
+  content: '';
+  width: 0.95rem;
+  height: 0.95rem;
+  border-radius: 999px;
+  background: inherit;
+  box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.25);
+  /* 用背景色：按钮 background 即色值 */
+  background-color: inherit;
+}
+
+.img-color-history-dot span {
+  /* 文本色保持可读 */
+  color: var(--text);
+}
+
+/* 色点：按钮本身背景是色值，伪元素会继承；改为独立圆点更清晰 */
+.img-color-history-dot {
+  background-clip: padding-box;
+}
+
+.img-color-history-dot::before {
+  background: currentColor;
+  color: inherit;
+  /* 真正的色点用 box-shadow 从 style.background 不好取，改为整钮着色 + 标签 */
+  display: none;
+}
+
+.img-color-history-dot span {
+  background: rgba(15, 23, 42, 0.72);
+  color: #e5eefb;
+  border-radius: 999px;
+  padding: 0.12rem 0.4rem;
+}

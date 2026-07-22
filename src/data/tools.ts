@@ -14,7 +14,7 @@ export interface ToolItem {
   description: string
   /** 分类 */
   category: string
-  /** 展示用图标（emoji） */
+  /** Lucide 图标名（见 ToolIcon） */
   icon: string
 }
 
@@ -26,7 +26,7 @@ export const tools: ToolItem[] = [
     shortName: 'JSON',
     description: '格式化、压缩、校验，纯本地处理',
     category: '数据格式',
-    icon: '{ }',
+    icon: 'braces',
   },
   {
     path: '/yaml',
@@ -34,7 +34,7 @@ export const tools: ToolItem[] = [
     shortName: 'YAML',
     description: 'YAML 格式化、校验，与 JSON 互转',
     category: '数据格式',
-    icon: 'YML',
+    icon: 'file-code',
   },
   {
     path: '/base64',
@@ -42,7 +42,7 @@ export const tools: ToolItem[] = [
     shortName: 'Base64',
     description: 'Base64 加密 / 解密，支持 UTF-8 与 URL-safe',
     category: '编码解码',
-    icon: '64',
+    icon: 'binary',
   },
   {
     path: '/url',
@@ -50,7 +50,7 @@ export const tools: ToolItem[] = [
     shortName: 'URL',
     description: 'URL 解析、编解码与查询参数',
     category: '编码解码',
-    icon: '🔗',
+    icon: 'link',
   },
   {
     path: '/radix',
@@ -58,15 +58,23 @@ export const tools: ToolItem[] = [
     shortName: '进制',
     description: '2–36 进制整数互转',
     category: '数据格式',
-    icon: '0x',
+    icon: 'calculator',
   },
   {
     path: '/base64-image',
     name: 'Base64 图片互转',
-    shortName: '图片',
+    shortName: '图片B64',
     description: '图片 ↔ Base64，拖拽上传与预览下载',
     category: '编码解码',
-    icon: '🖼',
+    icon: 'image',
+  },
+  {
+    path: '/base64-hex',
+    name: 'Base64 / Hex 文件',
+    shortName: 'B64/Hex',
+    description: '任意文件与 Base64、Hex 文本互转下载',
+    category: '编码解码',
+    icon: 'package',
   },
   {
     path: '/color',
@@ -74,23 +82,39 @@ export const tools: ToolItem[] = [
     shortName: '颜色',
     description: 'HEX / RGB / HSL / HSV 互转与预览',
     category: '设计开发',
-    icon: '🎨',
+    icon: 'palette',
   },
   {
     path: '/palette',
     name: '调色板',
     shortName: '调色板',
-    description: '互补/类似/三元/单色等配色方案生成',
+    description: '配色方案生成，支持链接导入基准色',
     category: '设计开发',
-    icon: '🎛',
+    icon: 'swatch-book',
+  },
+  {
+    path: '/image-color',
+    name: '图片取色',
+    shortName: '取色',
+    description: '点击取色、主色提取，联动调色板 / 渐变',
+    category: '设计开发',
+    icon: 'pipette',
+  },
+  {
+    path: '/gradient',
+    name: '渐变生成器',
+    shortName: '渐变',
+    description: '线性 / 径向渐变可视化，导出 CSS',
+    category: '设计开发',
+    icon: 'blend',
   },
   {
     path: '/regex',
     name: '正则表达式',
     shortName: '正则',
-    description: '正则匹配、捕获组、替换，实时高亮',
+    description: '匹配/替换、常用模板库与语法速查',
     category: '文本处理',
-    icon: '.*',
+    icon: 'regex',
   },
   {
     path: '/markdown',
@@ -98,15 +122,15 @@ export const tools: ToolItem[] = [
     shortName: 'MD',
     description: 'Markdown 实时预览与目录提取',
     category: '文本处理',
-    icon: 'MD',
+    icon: 'file-text',
   },
   {
     path: '/cron',
-    name: 'Cron 解析',
+    name: 'Cron 解析 / 编辑',
     shortName: 'Cron',
-    description: 'Cron 表达式人类可读解析与下次触发',
+    description: '可视化编辑、中文解析与下次触发',
     category: '日期时间',
-    icon: '⏱',
+    icon: 'timer',
   },
   {
     path: '/qrcode',
@@ -114,7 +138,7 @@ export const tools: ToolItem[] = [
     shortName: '二维码',
     description: '二维码本地生成与图片识别',
     category: '编码解码',
-    icon: '▣',
+    icon: 'qr-code',
   },
   {
     path: '/image',
@@ -122,7 +146,7 @@ export const tools: ToolItem[] = [
     shortName: '压图',
     description: 'Canvas 改尺寸、压缩与格式导出',
     category: '设计开发',
-    icon: '🖼',
+    icon: 'image-down',
   },
   {
     path: '/svg',
@@ -130,7 +154,7 @@ export const tools: ToolItem[] = [
     shortName: 'SVG',
     description: 'SVG 清理优化与预览导出',
     category: '设计开发',
-    icon: '◇',
+    icon: 'shapes',
   },
   {
     path: '/css-box',
@@ -138,7 +162,7 @@ export const tools: ToolItem[] = [
     shortName: 'CSS',
     description: 'box-shadow / border-radius 可视化生成',
     category: '设计开发',
-    icon: '▢',
+    icon: 'square-round-corner',
   },
   {
     path: '/hash',
@@ -146,15 +170,15 @@ export const tools: ToolItem[] = [
     shortName: '哈希',
     description: 'MD5 / SHA-1/256/384/512 文本与文件',
     category: '安全工具',
-    icon: '#',
+    icon: 'hash',
   },
   {
     path: '/jwt',
-    name: 'JWT 解析',
+    name: 'JWT 解析 / 验签',
     shortName: 'JWT',
-    description: 'JWT Header / Payload 本地解析',
+    description: '解析 Header/Payload，本地 HS/RS 验签',
     category: '安全工具',
-    icon: 'JWT',
+    icon: 'shield-check',
   },
   {
     path: '/mime',
@@ -162,7 +186,7 @@ export const tools: ToolItem[] = [
     shortName: 'MIME',
     description: '扩展名与 MIME Type 互查',
     category: '编码解码',
-    icon: '📎',
+    icon: 'file-type',
   },
   {
     path: '/timezone',
@@ -170,7 +194,7 @@ export const tools: ToolItem[] = [
     shortName: '时区',
     description: '多时区对照与墙上时钟转换',
     category: '日期时间',
-    icon: '🌍',
+    icon: 'globe',
   },
   {
     path: '/crypto',
@@ -178,7 +202,7 @@ export const tools: ToolItem[] = [
     shortName: '加解密',
     description: 'AES 对称加密 / RSA 非对称加解密',
     category: '安全工具',
-    icon: '🔐',
+    icon: 'lock',
   },
   {
     path: '/password',
@@ -186,7 +210,7 @@ export const tools: ToolItem[] = [
     shortName: '密码',
     description: '可配置长度与字符集的安全密码生成',
     category: '安全工具',
-    icon: '🔑',
+    icon: 'key-round',
   },
   {
     path: '/guid',
@@ -194,7 +218,7 @@ export const tools: ToolItem[] = [
     shortName: 'GUID',
     description: 'UUID / GUID 批量生成与格式切换',
     category: '安全工具',
-    icon: 'ID',
+    icon: 'scan',
   },
   {
     path: '/fingerprint',
@@ -202,7 +226,7 @@ export const tools: ToolItem[] = [
     shortName: '指纹',
     description: '本机环境信息与简易指纹哈希',
     category: '网络信息',
-    icon: '🖥',
+    icon: 'fingerprint',
   },
   {
     path: '/timestamp',
@@ -210,7 +234,7 @@ export const tools: ToolItem[] = [
     shortName: '时间戳',
     description: 'Unix 时间戳与日期时间双向转换',
     category: '日期时间',
-    icon: '⏱',
+    icon: 'clock',
   },
   {
     path: '/ip',
@@ -218,7 +242,7 @@ export const tools: ToolItem[] = [
     shortName: 'IP',
     description: '浏览器环境信息与公网 IP 查询',
     category: '网络信息',
-    icon: '🌐',
+    icon: 'wifi',
   },
 ]
 

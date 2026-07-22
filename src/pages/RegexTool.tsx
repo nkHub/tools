@@ -1,6 +1,7 @@
 import { useMemo, useState, type ReactNode } from 'react'
 import { ToolPage } from '../components/ToolPage'
 import { useCopyFeedback } from '../hooks/useCopyFeedback'
+import { REGEX_CHEATSHEET, REGEX_TEMPLATES, type RegexTemplate } from '../data/regex-ref'
 import './RegexTool.css'
 
 interface MatchInfo {
@@ -19,7 +20,6 @@ function buildRegex(pattern: string, flags: string): { re: RegExp | null; error:
     const clean = [...new Set(flags.replace(/\s/g, '').split(''))]
       .filter((f) => 'gimsuy'.includes(f))
       .join('')
-    // 匹配列表需要 g；保留用户选择的其它标志
     const finalFlags = clean.includes('g') ? clean : `${clean}g`
     return { re: new RegExp(pattern, finalFlags), error: '' }
   } catch (e) {
@@ -42,7 +42,6 @@ function collectMatches(re: RegExp, text: string): MatchInfo[] {
       groups: m.slice(1),
       named: m.groups as Record<string, string> | undefined,
     })
-    // 避免零宽匹配死循环
     if (m[0].length === 0) {
       re.lastIndex += 1
     }
@@ -76,8 +75,10 @@ function highlightText(text: string, matches: MatchInfo[]) {
   return nodes
 }
 
+const TEMPLATE_CATEGORIES = [...new Set(REGEX_TEMPLATES.map((t) => t.category))]
+
 /**
- * 正则表达式测试工具：匹配、捕获组、替换
+ * 正则表达式测试工具：匹配、捕获组、替换、模板库与速查
  */
 export function RegexTool() {
   const [pattern, setPattern] = useState('\\b\\w+@\\w+\\.\\w+\\b')
@@ -86,6 +87,8 @@ export function RegexTool() {
     '联系我：alice@example.com 或 bob@test.org\n电话可忽略，只测邮箱。',
   )
   const [replacement, setReplacement] = useState('[$&]')
+  const [templateCategory, setTemplateCategory] = useState<string>('全部')
+  const [cheatOpen, setCheatOpen] = useState(true)
   const { copy } = useCopyFeedback()
 
   const compiled = useMemo(() => buildRegex(pattern, flags), [pattern, flags])
@@ -98,7 +101,6 @@ export function RegexTool() {
   const replaced = useMemo(() => {
     if (!compiled.re) return ''
     try {
-      // replace 使用不强制 g 的版本会更符合用户 flags；此处用同一 re
       const re = new RegExp(
         compiled.re.source,
         flags.includes('g') ? compiled.re.flags : compiled.re.flags.replace('g', ''),
@@ -109,16 +111,69 @@ export function RegexTool() {
     }
   }, [compiled.re, text, replacement, flags])
 
+  const filteredTemplates = useMemo(() => {
+    if (templateCategory === '全部') return REGEX_TEMPLATES
+    return REGEX_TEMPLATES.filter((t) => t.category === templateCategory)
+  }, [templateCategory])
+
   function toggleFlag(f: string) {
     setFlags((prev) => (prev.includes(f) ? prev.replace(f, '') : `${prev}${f}`))
+  }
+
+  function applyTemplate(t: RegexTemplate) {
+    setPattern(t.pattern)
+    setFlags(t.flags)
+    if (t.sample != null) setText(t.sample)
+    if (t.replacement != null) setReplacement(t.replacement)
   }
 
   return (
     <ToolPage
       title="正则表达式测试"
-      description="编写正则并实时匹配文本，查看捕获组与替换结果。全部在浏览器本地运行。"
+      description="编写正则并实时匹配文本，查看捕获组与替换结果；附带常用模板库与语法速查。全部在浏览器本地运行。"
       badge="离线"
     >
+      <div className="panel">
+        <div className="panel-head">
+          <h2>常用模板</h2>
+          <div className="toolbar">
+            <button
+              type="button"
+              className={`btn ${templateCategory === '全部' ? 'btn-primary' : 'btn-ghost'}`}
+              onClick={() => setTemplateCategory('全部')}
+            >
+              全部
+            </button>
+            {TEMPLATE_CATEGORIES.map((cat) => (
+              <button
+                key={cat}
+                type="button"
+                className={`btn ${templateCategory === cat ? 'btn-primary' : 'btn-ghost'}`}
+                onClick={() => setTemplateCategory(cat)}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="regex-templates">
+          {filteredTemplates.map((t) => (
+            <button
+              key={`${t.category}-${t.name}`}
+              type="button"
+              className="regex-template-card"
+              onClick={() => applyTemplate(t)}
+              title={t.description}
+            >
+              <span className="regex-template-cat">{t.category}</span>
+              <strong>{t.name}</strong>
+              <code>{t.pattern.length > 42 ? `${t.pattern.slice(0, 42)}…` : t.pattern}</code>
+              <span className="regex-template-desc">{t.description}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
       <div className="panel">
         <div className="regex-pattern-row">
           <span className="regex-slash">/</span>
@@ -161,6 +216,9 @@ export function RegexTool() {
               {f}
             </button>
           ))}
+          <button type="button" className="btn btn-ghost" onClick={() => void copy(pattern)} disabled={!pattern}>
+            复制正则
+          </button>
           <span className="status-info" style={{ marginLeft: '0.35rem' }}>
             {compiled.error
               ? ''
@@ -266,6 +324,47 @@ export function RegexTool() {
           <label>替换结果</label>
           <textarea className="code-area" value={replaced} readOnly spellCheck={false} />
         </div>
+      </div>
+
+      <div className="panel">
+        <div className="panel-head">
+          <h2>语法速查 Cheatsheet</h2>
+          <button type="button" className="btn btn-ghost" onClick={() => setCheatOpen((v) => !v)}>
+            {cheatOpen ? '收起' : '展开'}
+          </button>
+        </div>
+        {cheatOpen ? (
+          <div className="regex-cheat-grid">
+            {REGEX_CHEATSHEET.map((section) => (
+              <div className="regex-cheat-section" key={section.title}>
+                <h3>{section.title}</h3>
+                <dl>
+                  {section.items.map((item) => (
+                    <div className="regex-cheat-row" key={item.token + item.meaning}>
+                      <dt>
+                        <code
+                          role="button"
+                          tabIndex={0}
+                          title="点击填入模式框"
+                          onClick={() => setPattern((prev) => (prev ? `${prev}${item.token}` : item.token))}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              e.preventDefault()
+                              setPattern((prev) => (prev ? `${prev}${item.token}` : item.token))
+                            }
+                          }}
+                        >
+                          {item.token}
+                        </code>
+                      </dt>
+                      <dd>{item.meaning}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            ))}
+          </div>
+        ) : null}
       </div>
     </ToolPage>
   )

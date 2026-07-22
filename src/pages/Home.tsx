@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
+import { ToolIcon } from '../components/ToolIcon'
 import { categoryToId, groupToolsByCategory, tools } from '../data/tools'
 import './Home.css'
 
@@ -79,7 +80,7 @@ export function Home() {
               {items.map((tool) => (
                 <Link key={tool.path} to={tool.path} className="tool-card">
                   <div className="tool-icon" aria-hidden>
-                    {tool.icon}
+                    <ToolIcon name={tool.icon} size={20} />
                   </div>
                   <div>
                     <h3>{tool.name}</h3>
@@ -97,10 +98,6 @@ export function Home() {
         <ul>
           <li>JSON / YAML / 时间戳 / 加解密 / 正则等均为纯本地计算，断网也可使用。</li>
           <li>公网 IP 查询依赖第三方公开接口；浏览器指纹来自本机环境 API，不上传。</li>
-          <li>
-            建议通过 <code>npm run build</code> 后静态部署，或直接本地 <code>npm run dev</code>{' '}
-            使用。
-          </li>
         </ul>
       </section>
     </div>

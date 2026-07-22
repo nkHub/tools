@@ -5,10 +5,13 @@ import { JsonTool } from './pages/JsonTool'
 import { YamlTool } from './pages/YamlTool'
 import { Base64Tool } from './pages/Base64Tool'
 import { Base64ImageTool } from './pages/Base64ImageTool'
+import { Base64HexTool } from './pages/Base64HexTool'
 import { UrlTool } from './pages/UrlTool'
 import { RadixTool } from './pages/RadixTool'
 import { ColorTool } from './pages/ColorTool'
 import { PaletteTool } from './pages/PaletteTool'
+import { ImageColorTool } from './pages/ImageColorTool'
+import { GradientTool } from './pages/GradientTool'
 import { RegexTool } from './pages/RegexTool'
 import { MarkdownTool } from './pages/MarkdownTool'
 import { CronTool } from './pages/CronTool'
@@ -41,10 +44,13 @@ export default function App() {
           <Route path="yaml" element={<YamlTool />} />
           <Route path="base64" element={<Base64Tool />} />
           <Route path="base64-image" element={<Base64ImageTool />} />
+          <Route path="base64-hex" element={<Base64HexTool />} />
           <Route path="url" element={<UrlTool />} />
           <Route path="radix" element={<RadixTool />} />
           <Route path="color" element={<ColorTool />} />
           <Route path="palette" element={<PaletteTool />} />
+          <Route path="image-color" element={<ImageColorTool />} />
+          <Route path="gradient" element={<GradientTool />} />
           <Route path="regex" element={<RegexTool />} />
           <Route path="markdown" element={<MarkdownTool />} />
           <Route path="cron" element={<CronTool />} />

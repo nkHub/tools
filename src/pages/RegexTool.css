@@ -78,3 +78,111 @@
   color: var(--muted);
   word-break: break-all;
 }
+
+/* 常用模板 */
+.regex-templates {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.55rem;
+}
+
+.regex-template-card {
+  appearance: none;
+  text-align: left;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: var(--surface-2);
+  color: var(--text);
+  padding: 0.7rem 0.75rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+  transition: border-color 0.12s ease, transform 0.12s ease;
+  min-height: 108px;
+}
+
+.regex-template-card:hover {
+  border-color: color-mix(in srgb, #38bdf8 50%, var(--border));
+  transform: translateY(-1px);
+}
+
+.regex-template-cat {
+  font-size: 0.7rem;
+  color: #67e8f9;
+  font-weight: 600;
+}
+
+.regex-template-card strong {
+  font-size: 0.92rem;
+}
+
+.regex-template-card code {
+  font-size: 0.72rem;
+  color: var(--muted);
+  word-break: break-all;
+  line-height: 1.35;
+}
+
+.regex-template-desc {
+  font-size: 0.75rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+/* 语法速查 */
+.regex-cheat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 0.75rem;
+}
+
+.regex-cheat-section {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 0.7rem 0.8rem;
+}
+
+.regex-cheat-section h3 {
+  margin: 0 0 0.55rem;
+  font-size: 0.88rem;
+}
+
+.regex-cheat-section dl {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.regex-cheat-row {
+  display: grid;
+  grid-template-columns: minmax(72px, auto) 1fr;
+  gap: 0.5rem;
+  align-items: baseline;
+}
+
+.regex-cheat-row dt {
+  margin: 0;
+}
+
+.regex-cheat-row dt code {
+  font-size: 0.78rem;
+  color: #67e8f9;
+  cursor: pointer;
+  border-radius: 0.3rem;
+  padding: 0.05rem 0.25rem;
+  background: color-mix(in srgb, #38bdf8 12%, transparent);
+}
+
+.regex-cheat-row dt code:hover {
+  background: color-mix(in srgb, #38bdf8 22%, transparent);
+}
+
+.regex-cheat-row dd {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.4;
+}

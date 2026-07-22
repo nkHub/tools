@@ -6,8 +6,7 @@
   line-height: 1.65;
   color: var(--text);
   overflow: auto;
-  min-height: 280px;
-  max-height: min(70vh, 720px);
+  min-height: 0;
   padding: 0.65rem 0.5rem;
   border-radius: 0.7rem;
   background: #0a0f18;
@@ -39,7 +38,8 @@
   padding: 0;
   margin: 0 0.15rem 0 0;
   cursor: pointer;
-  font-size: 0.65rem;
+  display: inline-grid;
+  place-items: center;
   line-height: 1;
   flex-shrink: 0;
   border-radius: 0.25rem;
@@ -141,10 +141,22 @@
   outline: 1px solid rgba(250, 204, 21, 0.28);
 }
 
+/* 当前激活匹配（上一个/下一个） */
+.jt-line.jt-hit-active {
+  background: rgba(56, 189, 248, 0.22);
+  outline: 1px solid rgba(56, 189, 248, 0.55);
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.18);
+}
+
 .jt-match {
   background: rgba(250, 204, 21, 0.35) !important;
   border-radius: 0.2rem;
   box-shadow: 0 0 0 1px rgba(250, 204, 21, 0.45);
+}
+
+.jt-line.jt-hit-active .jt-match {
+  background: rgba(56, 189, 248, 0.45) !important;
+  box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.55);
 }
 
 /* 树视图上方搜索条 */
@@ -181,6 +193,20 @@
   font-size: 0.8rem;
   color: var(--muted);
   white-space: nowrap;
+  min-width: 4.5rem;
+  text-align: center;
+}
+
+.json-search-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.json-search-nav .btn {
+  min-width: 2rem;
+  padding-left: 0.45rem;
+  padding-right: 0.45rem;
 }
 
 /* 工具栏中的视图切换 */
@@ -214,18 +240,10 @@
   color: #0f172a;
 }
 
-.json-viewer-panel {
-  display: flex;
-  flex-direction: column;
-  gap: 0.65rem;
-  min-height: 0;
-}
-
 .json-raw-view {
   margin: 0;
   padding: 0.85rem;
-  min-height: 280px;
-  max-height: min(70vh, 720px);
+  min-height: 0;
   overflow: auto;
   border-radius: 0.7rem;
   background: #0a0f18;

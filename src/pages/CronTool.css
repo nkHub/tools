@@ -1,0 +1,94 @@
+/* Cron 可视化编辑 */
+
+.cron-visual {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.75rem;
+}
+
+.cron-field-card {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 0.85rem;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.cron-field-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.cron-field-head strong {
+  font-size: 0.9rem;
+}
+
+.cron-field-head code {
+  font-size: 0.78rem;
+  color: #67e8f9;
+  max-width: 60%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cron-inline-fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.cron-inline-fields label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.cron-inline-fields input[type='number'] {
+  width: 4.5rem;
+  padding: 0.35rem 0.45rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+}
+
+.cron-chip-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  max-height: 140px;
+  overflow: auto;
+}
+
+.cron-chip {
+  appearance: none;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--muted);
+  border-radius: 0.4rem;
+  min-width: 2rem;
+  height: 1.85rem;
+  padding: 0 0.4rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.cron-chip:hover {
+  border-color: color-mix(in srgb, #38bdf8 45%, var(--border));
+  color: var(--text);
+}
+
+.cron-chip.active {
+  background: color-mix(in srgb, #38bdf8 28%, var(--surface));
+  border-color: color-mix(in srgb, #38bdf8 55%, var(--border));
+  color: #e0f2fe;
+  font-weight: 600;
+}

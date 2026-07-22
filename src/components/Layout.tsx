@@ -2,6 +2,7 @@ import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import { categoryToId, getToolCategories } from '../data/tools'
 import { ScrollToTop } from './ScrollToTop'
 import { ToastProvider } from './Toast'
+import { ToolIcon } from './ToolIcon'
 import './Layout.css'
 
 /**
@@ -21,7 +22,9 @@ export function Layout() {
         <header className="app-header">
           <div className="header-inner">
             <NavLink to="/" className="brand" end>
-              <span className="brand-mark">🧰</span>
+              <span className="brand-mark" aria-hidden>
+                <ToolIcon name="wrench" size={18} strokeWidth={2.1} />
+              </span>
               <span className="brand-text">
                 <strong>离线工具箱</strong>
                 <small>Offline Tools</small>

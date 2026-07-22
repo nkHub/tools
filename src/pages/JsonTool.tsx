@@ -1,8 +1,10 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, type KeyboardEvent } from 'react'
 import { JsonTree, tryParseJson } from '../components/JsonTree'
 import { Select } from '../components/Select'
 import { ToolPage } from '../components/ToolPage'
 import { useCopyFeedback } from '../hooks/useCopyFeedback'
+import { UiIcon } from '../components/ToolIcon'
+import './JsonTool.css'
 
 /** 右侧展示模式：树形（类 json.cn）/ 纯文本 */
 type ViewMode = 'tree' | 'text'
@@ -43,6 +45,12 @@ export function JsonTool() {
   const [searchQuery, setSearchQuery] = useState('')
   /** 当前搜索命中数 */
   const [matchCount, setMatchCount] = useState(0)
+  /** 有序匹配路径（深度优先） */
+  const [matchPaths, setMatchPaths] = useState<string[]>([])
+  /** 当前激活匹配序号 0-based */
+  const [matchIndex, setMatchIndex] = useState(0)
+  /** 可视化面板全屏 */
+  const [viewerFullscreen, setViewerFullscreen] = useState(false)
   /** 格式化后的文本输出（文本视图 / 复制用） */
   const [formatted, setFormatted] = useState('')
   /** 解析后的数据（树视图） */
@@ -136,6 +144,51 @@ export function JsonTool() {
     setStatus('')
     setSearchQuery('')
     setMatchCount(0)
+    setMatchPaths([])
+    setMatchIndex(0)
+  }
+
+  /** 搜索词变化时回到第一条 */
+  useEffect(() => {
+    setMatchIndex(0)
+  }, [searchQuery])
+
+  /** 全屏：Esc 退出 + 锁定背景滚动 */
+  useEffect(() => {
+    if (!viewerFullscreen) return
+    const onKey = (e: globalThis.KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault()
+        setViewerFullscreen(false)
+      }
+    }
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    window.addEventListener('keydown', onKey)
+    return () => {
+      document.body.style.overflow = prevOverflow
+      window.removeEventListener('keydown', onKey)
+    }
+  }, [viewerFullscreen])
+
+  function goMatch(delta: number) {
+    if (matchCount <= 0) return
+    setMatchIndex((prev) => {
+      const next = (prev + delta) % matchCount
+      return next < 0 ? next + matchCount : next
+    })
+  }
+
+  function handleSearchKeyDown(e: KeyboardEvent<HTMLInputElement>) {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      goMatch(e.shiftKey ? -1 : 1)
+      return
+    }
+    if (e.key === 'F3') {
+      e.preventDefault()
+      goMatch(e.shiftKey ? -1 : 1)
+    }
   }
 
   /** 将格式化结果写回输入 */
@@ -200,8 +253,8 @@ export function JsonTool() {
         </div>
       </div>
 
-      <div className="grid-2">
-        <div className="panel">
+      <div className="grid-2 json-split">
+        <div className="panel json-input-panel">
           <div className="panel-head">
             <h2>输入</h2>
             <span className="status-info">{charCount} 字符</span>
@@ -215,13 +268,25 @@ export function JsonTool() {
               spellCheck={false}
             />
           </div>
-          {error ? <p className="status-error" style={{ marginTop: '0.65rem' }}>{error}</p> : null}
-          {!error && status ? <p className="status-ok" style={{ marginTop: '0.65rem' }}>{status}</p> : null}
+          {error ? (
+            <p className="status-error json-panel-status">{error}</p>
+          ) : status ? (
+            <p className="status-ok json-panel-status">{status}</p>
+          ) : (
+            <p className="status-info json-panel-status" aria-hidden>
+              {'\u00a0'}
+            </p>
+          )}
         </div>
 
-        <div className="panel json-viewer-panel">
+        <div
+          className={`panel json-viewer-panel${viewerFullscreen ? ' is-fullscreen' : ''}`}
+          role={viewerFullscreen ? 'dialog' : undefined}
+          aria-modal={viewerFullscreen || undefined}
+          aria-label={viewerFullscreen ? 'JSON 可视化（全屏）' : undefined}
+        >
           <div className="panel-head">
-            <h2>可视化</h2>
+            <h2>可视化{viewerFullscreen ? ' · 全屏' : ''}</h2>
             <div className="toolbar">
               <div className="view-tabs" role="tablist" aria-label="视图切换">
                 <button
@@ -261,6 +326,17 @@ export function JsonTool() {
               >
                 复制 JSON
               </button>
+              <button
+                type="button"
+                className="btn btn-ghost"
+                onClick={() => setViewerFullscreen((v) => !v)}
+                title={viewerFullscreen ? '退出全屏（Esc）' : '全屏可视化'}
+                aria-label={viewerFullscreen ? '退出全屏' : '全屏可视化'}
+                aria-pressed={viewerFullscreen}
+              >
+                <UiIcon name={viewerFullscreen ? 'minimize' : 'maximize'} size={16} strokeWidth={2.1} />
+                <span className="json-fs-btn-label">{viewerFullscreen ? '退出' : '全屏'}</span>
+              </button>
             </div>
           </div>
 
@@ -271,13 +347,40 @@ export function JsonTool() {
                 className="json-search-input"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="搜索键名、路径或值…"
+                onKeyDown={handleSearchKeyDown}
+                placeholder="搜索键名、路径或值… Enter 下一个 / Shift+Enter 上一个"
                 aria-label="搜索 JSON"
               />
               {searchQuery.trim() ? (
-                <span className="json-search-count">
-                  {matchCount > 0 ? `${matchCount} 处匹配` : '无匹配'}
-                </span>
+                <>
+                  <span className="json-search-count">
+                    {matchCount > 0
+                      ? `${Math.min(matchIndex, matchCount - 1) + 1} / ${matchCount}`
+                      : '无匹配'}
+                  </span>
+                  <div className="json-search-nav">
+                    <button
+                      type="button"
+                      className="btn btn-ghost"
+                      onClick={() => goMatch(-1)}
+                      disabled={matchCount <= 0}
+                      title="上一个（Shift+Enter）"
+                      aria-label="上一个匹配"
+                    >
+                      <UiIcon name="chevron-up" size={16} strokeWidth={2.2} />
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-ghost"
+                      onClick={() => goMatch(1)}
+                      disabled={matchCount <= 0}
+                      title="下一个（Enter）"
+                      aria-label="下一个匹配"
+                    >
+                      <UiIcon name="chevron-down" size={16} strokeWidth={2.2} />
+                    </button>
+                  </div>
+                </>
               ) : null}
             </div>
           ) : null}
@@ -289,7 +392,9 @@ export function JsonTool() {
                 data={treeData}
                 defaultExpandDepth={expandDepth}
                 searchQuery={searchQuery}
+                activeMatchIndex={matchIndex}
                 onSearchMatchCount={setMatchCount}
+                onSearchMatches={setMatchPaths}
                 onCopyPath={(p) => {
                   void copy(p)
                 }}
@@ -307,7 +412,11 @@ export function JsonTool() {
           )}
 
           <p className="status-info" style={{ margin: 0 }}>
-            提示：树形模式下可搜索键/值；点击<strong>键名</strong>复制路径，点击<strong>值</strong>复制内容。
+            提示：树形模式下可搜索键/值，用 ↑↓ 或 Enter / Shift+Enter 在匹配间跳转；点击
+            <strong>键名</strong>复制路径，点击<strong>值</strong>复制内容。
+            {matchPaths.length > 0 && searchQuery.trim()
+              ? ` 当前：${matchPaths[Math.min(matchIndex, matchPaths.length - 1)]}`
+              : ''}
           </p>
         </div>
       </div>

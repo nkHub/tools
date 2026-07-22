@@ -1,5 +1,26 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { UiIcon } from './ToolIcon'
 import './JsonTree.css'
+
+/**
+ * 仅在 scrollRoot 内部滚动，使 target 尽量垂直居中；不触发页面滚动
+ */
+function scrollIntoContainer(
+  scrollRoot: HTMLElement,
+  target: HTMLElement,
+  behavior: ScrollBehavior = 'smooth',
+) {
+  const rootRect = scrollRoot.getBoundingClientRect()
+  const targetRect = target.getBoundingClientRect()
+  const targetCenter =
+    targetRect.top - rootRect.top + scrollRoot.scrollTop + targetRect.height / 2
+  const nextTop = Math.max(0, targetCenter - scrollRoot.clientHeight / 2)
+  const maxTop = Math.max(0, scrollRoot.scrollHeight - scrollRoot.clientHeight)
+  scrollRoot.scrollTo({
+    top: Math.min(nextTop, maxTop),
+    behavior,
+  })
+}
 
 /** 树节点路径，用点号/下标描述，如 a.b[0].c */
 type JsonPath = (string | number)[]
@@ -11,11 +32,15 @@ interface JsonTreeProps {
   defaultExpandDepth?: number
   /** 搜索关键词：匹配键名 / 路径 / 原始值（不区分大小写） */
   searchQuery?: string
+  /** 当前激活的匹配序号（0-based），用于上一个/下一个跳转 */
+  activeMatchIndex?: number
   /** 点击路径或值时的回调（可选） */
   onCopyPath?: (path: string) => void
   onCopyValue?: (value: string) => void
   /** 匹配结果数量变化时回调 */
   onSearchMatchCount?: (count: number) => void
+  /** 有序匹配路径列表（深度优先），便于上一个/下一个导航 */
+  onSearchMatches?: (paths: string[]) => void
 }
 
 /**
@@ -75,14 +100,15 @@ function keyMatches(name: string | number | undefined, q: string): boolean {
 }
 
 /**
- * 深度优先收集所有匹配节点的路径字符串集合，
+ * 深度优先收集所有匹配节点的有序路径列表，
  * 同时收集需要强制展开的祖先路径（便于自动展开到匹配项）
  */
 function collectSearchHits(
   value: unknown,
   path: JsonPath,
   q: string,
-  hits: Set<string>,
+  hitList: string[],
+  hitSet: Set<string>,
   expandPaths: Set<string>,
   name?: string | number,
 ): void {
@@ -91,8 +117,9 @@ function collectSearchHits(
   const pathStr = formatPath(path)
   const selfHit = keyMatches(name, q) || valueMatches(value, q) || pathStr.toLowerCase().includes(q)
 
-  if (selfHit) {
-    hits.add(pathStr)
+  if (selfHit && !hitSet.has(pathStr)) {
+    hitSet.add(pathStr)
+    hitList.push(pathStr)
     // 祖先路径都需要展开
     for (let i = 0; i < path.length; i++) {
       expandPaths.add(formatPath(path.slice(0, i)))
@@ -102,11 +129,11 @@ function collectSearchHits(
   if (value !== null && typeof value === 'object') {
     if (Array.isArray(value)) {
       value.forEach((child, i) => {
-        collectSearchHits(child, [...path, i], q, hits, expandPaths, i)
+        collectSearchHits(child, [...path, i], q, hitList, hitSet, expandPaths, i)
       })
     } else {
       for (const [k, child] of Object.entries(value as Record<string, unknown>)) {
-        collectSearchHits(child, [...path, k], q, hits, expandPaths, k)
+        collectSearchHits(child, [...path, k], q, hitList, hitSet, expandPaths, k)
       }
     }
   }
@@ -122,6 +149,8 @@ interface NodeProps {
   searchQuery: string
   /** 命中的路径集合 */
   hitPaths: Set<string>
+  /** 当前激活匹配的路径（上一个/下一个） */
+  activePath: string | null
   /** 需要强制展开的路径集合 */
   expandPaths: Set<string>
   onCopyPath?: (path: string) => void
@@ -139,6 +168,7 @@ function JsonNode({
   defaultExpandDepth,
   searchQuery,
   hitPaths,
+  activePath,
   expandPaths,
   onCopyPath,
   onCopyValue,
@@ -157,7 +187,11 @@ function JsonNode({
   const hasChildren = isObject && entries.length > 0
   const isEmpty = isObject && entries.length === 0
   const isHit = hitPaths.has(pathStr)
-  const forceExpand = expandPaths.has(pathStr) || (searchQuery.length > 0 && isHit && hasChildren)
+  const isActive = Boolean(activePath && activePath === pathStr)
+  const forceExpand =
+    expandPaths.has(pathStr) ||
+    (searchQuery.length > 0 && isHit && hasChildren) ||
+    (isActive && hasChildren)
 
   const [expanded, setExpanded] = useState(depth < defaultExpandDepth || forceExpand)
 
@@ -166,7 +200,7 @@ function JsonNode({
     if (forceExpand) {
       setExpanded(true)
     }
-  }, [forceExpand, searchQuery])
+  }, [forceExpand, searchQuery, isActive])
 
   // 全部展开/折叠（defaultExpandDepth 变化）时重置
   useEffect(() => {
@@ -186,7 +220,7 @@ function JsonNode({
     return <span className="jt-unknown">{String(v)}</span>
   }
 
-  const lineClass = `jt-line${isHit ? ' jt-hit' : ''}`
+  const lineClass = `jt-line${isHit ? ' jt-hit' : ''}${isActive ? ' jt-hit-active' : ''}`
 
   const keyLabel =
     name === undefined ? null : (
@@ -212,7 +246,7 @@ function JsonNode({
       <div className={lineClass} style={{ paddingLeft: depth * 14 }} data-path={pathStr}>
         {hasChildren ? (
           <button type="button" className="jt-toggle" onClick={toggle} aria-label="展开">
-            ▶
+            <UiIcon name="chevron-right" size={12} strokeWidth={2.4} />
           </button>
         ) : (
           <span className="jt-toggle-placeholder" />
@@ -275,7 +309,7 @@ function JsonNode({
       <div className={lineClass} style={{ paddingLeft: depth * 14 }} data-path={pathStr}>
         {hasChildren ? (
           <button type="button" className="jt-toggle" onClick={toggle} aria-label="折叠">
-            ▼
+            <UiIcon name="chevron-down" size={12} strokeWidth={2.4} />
           </button>
         ) : (
           <span className="jt-toggle-placeholder" />
@@ -297,6 +331,7 @@ function JsonNode({
             defaultExpandDepth={defaultExpandDepth}
             searchQuery={searchQuery}
             hitPaths={hitPaths}
+            activePath={activePath}
             expandPaths={expandPaths}
             onCopyPath={onCopyPath}
             onCopyValue={onCopyValue}
@@ -324,39 +359,63 @@ export function JsonTree({
   data,
   defaultExpandDepth = 2,
   searchQuery = '',
+  activeMatchIndex = 0,
   onCopyPath,
   onCopyValue,
   onSearchMatchCount,
+  onSearchMatches,
 }: JsonTreeProps) {
   const q = searchQuery.trim().toLowerCase()
 
-  const { hitPaths, expandPaths } = useMemo(() => {
-    const hits = new Set<string>()
+  const { hitList, hitPaths, expandPaths } = useMemo(() => {
+    const list: string[] = []
+    const set = new Set<string>()
     const expand = new Set<string>()
     if (q) {
-      collectSearchHits(data, [], q, hits, expand)
+      collectSearchHits(data, [], q, list, set, expand)
     }
-    return { hitPaths: hits, expandPaths: expand }
+    return { hitList: list, hitPaths: set, expandPaths: expand }
   }, [data, q])
 
   useEffect(() => {
-    onSearchMatchCount?.(hitPaths.size)
-  }, [hitPaths, onSearchMatchCount])
+    onSearchMatchCount?.(hitList.length)
+    onSearchMatches?.(hitList)
+  }, [hitList, onSearchMatchCount, onSearchMatches])
 
-  // 有搜索时滚动到第一个命中项
+  const activePath =
+    hitList.length > 0
+      ? hitList[((activeMatchIndex % hitList.length) + hitList.length) % hitList.length] ?? null
+      : null
+
+  const treeRef = useRef<HTMLDivElement>(null)
+
+  // 仅在树容器内滚动到当前激活匹配，避免带动整页
   useEffect(() => {
-    if (!q || hitPaths.size === 0) return
-    const first = hitPaths.values().next().value as string | undefined
-    if (!first) return
-    // 等展开渲染后再滚
-    requestAnimationFrame(() => {
-      const el = document.querySelector(`.json-tree [data-path="${CSS.escape(first)}"]`)
-      el?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
+    if (!q || !activePath) return
+    const root = treeRef.current
+    if (!root) return
+
+    let cancelled = false
+    let raf2 = 0
+    // 双 rAF：等 forceExpand 展开节点完成布局后再量位置
+    const raf1 = window.requestAnimationFrame(() => {
+      raf2 = window.requestAnimationFrame(() => {
+        if (cancelled) return
+        const el = root.querySelector(`[data-path="${CSS.escape(activePath)}"]`)
+        if (el instanceof HTMLElement) {
+          scrollIntoContainer(root, el, 'smooth')
+        }
+      })
     })
-  }, [q, hitPaths])
+    return () => {
+      cancelled = true
+      window.cancelAnimationFrame(raf1)
+      window.cancelAnimationFrame(raf2)
+    }
+  }, [q, activePath, activeMatchIndex])
 
   return (
-    <div className="json-tree" role="tree" aria-label="JSON 树形视图">
+    <div ref={treeRef} className="json-tree" role="tree" aria-label="JSON 树形视图">
       <JsonNode
         value={data}
         path={[]}
@@ -364,6 +423,7 @@ export function JsonTree({
         defaultExpandDepth={defaultExpandDepth}
         searchQuery={q}
         hitPaths={hitPaths}
+        activePath={activePath}
         expandPaths={expandPaths}
         onCopyPath={onCopyPath}
         onCopyValue={onCopyValue}

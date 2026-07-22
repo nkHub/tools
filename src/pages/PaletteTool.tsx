@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 import { Select } from '../components/Select'
 import { ToolPage } from '../components/ToolPage'
 import { useCopyFeedback } from '../hooks/useCopyFeedback'
@@ -105,15 +106,45 @@ const DEFAULT: RgbaColor = { r: 56, g: 189, b: 248, a: 1 }
  * 调色板工具：基于基准色生成多种配色方案
  */
 export function PaletteTool() {
+  const [searchParams] = useSearchParams()
   const [base, setBase] = useState<RgbaColor>(DEFAULT)
   const [hexInput, setHexInput] = useState(() => formatColor(DEFAULT).hex)
   const [scheme, setScheme] = useState<Scheme>('analogous')
   const [count, setCount] = useState(5)
   const [error, setError] = useState('')
+  const [importHint, setImportHint] = useState('')
   const { copy } = useCopyFeedback()
 
   const palette = useMemo(() => buildPalette(base, scheme, count), [base, scheme, count])
   const schemeMeta = SCHEME_OPTIONS.find((s) => s.value === scheme)
+
+  /** 从 URL ?color= / ?hex= 导入基准色（图片取色 / 渐变联动） */
+  useEffect(() => {
+    const raw =
+      searchParams.get('color') ||
+      searchParams.get('hex') ||
+      searchParams.get('c') ||
+      searchParams.get('from')
+    if (!raw) return
+    const parsed = parseColor(raw)
+    if (!parsed) {
+      setError(`无法识别链接中的颜色：${raw}`)
+      return
+    }
+    setBase({ ...parsed, a: 1 })
+    setHexInput(formatColor(parsed).hex)
+    setError('')
+    setImportHint(`已从链接导入基准色 ${formatColor(parsed).hex}`)
+
+    const schemeRaw = searchParams.get('scheme')
+    if (schemeRaw && SCHEME_OPTIONS.some((s) => s.value === schemeRaw)) {
+      setScheme(schemeRaw as Scheme)
+    }
+    const countRaw = searchParams.get('count')
+    if (countRaw && Number.isFinite(Number(countRaw))) {
+      setCount(Math.max(2, Math.min(12, Number(countRaw))))
+    }
+  }, [searchParams])
 
   function applyHex(raw: string) {
     const parsed = parseColor(raw)
@@ -124,6 +155,7 @@ export function PaletteTool() {
     setBase({ ...parsed, a: 1 })
     setHexInput(formatColor(parsed).hex)
     setError('')
+    setImportHint('')
   }
 
   function handleExportCss() {
@@ -138,10 +170,15 @@ export function PaletteTool() {
   return (
     <ToolPage
       title="调色板"
-      description="从基准色生成互补、类似、三元、四元、单色等配色方案，一键导出 CSS 变量。"
+      description="从基准色生成互补、类似、三元、四元、单色等配色方案，一键导出 CSS 变量。支持从图片取色通过链接带入。"
       badge="离线"
     >
       <div className="panel">
+        {importHint ? (
+          <p className="status-ok" style={{ margin: '0 0 0.65rem' }}>
+            {importHint}
+          </p>
+        ) : null}
         <div className="toolbar" style={{ gap: '0.75rem', flexWrap: 'wrap' }}>
           <div className="field" style={{ minWidth: '12rem', flex: '1 1 12rem' }}>
             <label>基准色</label>
@@ -196,6 +233,16 @@ export function PaletteTool() {
             <button type="button" className="btn btn-ghost" onClick={handleExportList}>
               复制 HEX 列表
             </button>
+            <Link
+              className="btn btn-ghost"
+              to={`/gradient?colors=${encodeURIComponent(palette.map((c) => formatColor(c).hex).join(','))}`}
+              title="用当前色板打开渐变生成器"
+            >
+              → 渐变
+            </Link>
+            <Link className="btn btn-ghost" to="/image-color">
+              图片取色
+            </Link>
           </div>
         </div>
         {schemeMeta ? (

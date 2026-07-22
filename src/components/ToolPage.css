@@ -17,6 +17,18 @@
   flex-wrap: wrap;
 }
 
+.tool-title-icon {
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 0.75rem;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  color: #7dd3fc;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(129, 140, 248, 0.25));
+  border: 1px solid var(--border);
+}
+
 .tool-page-header h1 {
   margin: 0;
   font-size: 1.65rem;

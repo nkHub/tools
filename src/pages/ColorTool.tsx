@@ -1,4 +1,5 @@
-import { useMemo, useState, type ChangeEvent, type KeyboardEvent } from 'react'
+import { useEffect, useMemo, useState, type ChangeEvent, type KeyboardEvent } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { ToolPage } from '../components/ToolPage'
 import { useCopyFeedback } from '../hooks/useCopyFeedback'
 import {
@@ -35,6 +36,7 @@ const DEFAULT: RgbaColor = { r: 56, g: 189, b: 248, a: 1 }
  * - 一键复制 HEX / RGB / HSL / HSV 等
  */
 export function ColorTool() {
+  const [searchParams] = useSearchParams()
   const [color, setColor] = useState<RgbaColor>(DEFAULT)
   const [input, setInput] = useState(() => formatColor(DEFAULT).hex)
   const [error, setError] = useState('')
@@ -52,6 +54,14 @@ export function ColorTool() {
       setInput(formatColor(next).hex)
     }
   }
+
+  /** 链接导入：?color= / ?hex= */
+  useEffect(() => {
+    const raw = searchParams.get('color') || searchParams.get('hex') || searchParams.get('c')
+    if (!raw) return
+    const parsed = parseColor(raw)
+    if (parsed) applyColor(parsed, true)
+  }, [searchParams])
 
   /** 自由文本解析 */
   function handleParse() {

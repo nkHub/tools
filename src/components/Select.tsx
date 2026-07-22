@@ -8,6 +8,7 @@ import {
   type CSSProperties,
   type KeyboardEvent,
 } from 'react'
+import { UiIcon } from './ToolIcon'
 import './Select.css'
 
 export interface SelectOption {
@@ -178,15 +179,7 @@ export function Select({
           {selected?.label ?? placeholder}
         </span>
         <span className="ui-select-chevron" aria-hidden>
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-            <path
-              d="M2.5 4.25L6 7.75L9.5 4.25"
-              stroke="currentColor"
-              strokeWidth="1.6"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <UiIcon name="chevron-down" size={14} strokeWidth={2.2} />
         </span>
       </button>
 
@@ -224,7 +217,7 @@ export function Select({
                 <span>{opt.label}</span>
                 {isSelected ? (
                   <span className="ui-select-check" aria-hidden>
-                    ✓
+                    <UiIcon name="check" size={14} strokeWidth={2.4} />
                   </span>
                 ) : null}
               </li>

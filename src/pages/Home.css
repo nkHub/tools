@@ -127,8 +127,10 @@
   place-items: center;
   flex-shrink: 0;
   background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(129, 140, 248, 0.25));
-  font-size: 0.85rem;
-  font-weight: 700;
+  color: #7dd3fc;
+}
+
+.tool-card:hover .tool-icon {
   color: #e0f2fe;
 }
 

@@ -7,6 +7,7 @@ import {
   useState,
   type ReactNode,
 } from 'react'
+import { UiIcon } from './ToolIcon'
 import './Toast.css'
 
 /** Toast 类型：影响配色 */
@@ -67,7 +68,11 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             onClick={() => remove(item.id)}
           >
             <span className="toast-icon" aria-hidden>
-              {item.type === 'success' ? '✓' : item.type === 'error' ? '!' : 'i'}
+              <UiIcon
+                name={item.type === 'success' ? 'check' : item.type === 'error' ? 'alert' : 'info'}
+                size={15}
+                strokeWidth={2.25}
+              />
             </span>
             <span className="toast-text">{item.message}</span>
           </div>
