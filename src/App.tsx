@@ -40,7 +40,7 @@ import { PortTool } from './pages/PortTool'
  */
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.VITE_BASE_PATH}>
       <Routes>
         <Route element={<Layout />}>
           <Route index element={<Home />} />
