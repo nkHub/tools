@@ -14,7 +14,13 @@ import {
   ChevronUp,
   CircleAlert,
   Clock,
+  Copy,
   Crop,
+  Loader2,
+  Paperclip,
+  Plus,
+  Send,
+  Trash2,
   FileCode2,
   FileText,
   FileType,
@@ -84,6 +90,7 @@ export type ToolIconName =
   | 'crop'
   | 'network'
   | 'case-sensitive'
+  | 'send'
 
 const TOOL_ICON_MAP: Record<ToolIconName, LucideIcon> = {
   braces: Braces,
@@ -121,6 +128,7 @@ const TOOL_ICON_MAP: Record<ToolIconName, LucideIcon> = {
   crop: Crop,
   network: Network,
   'case-sensitive': CaseSensitive,
+  send: Send,
 }
 
 /** 通用 UI 图标（Toast / 导航 / 控件） */
@@ -136,6 +144,12 @@ export type UiIconName =
   | 'wrench'
   | 'maximize'
   | 'minimize'
+  | 'plus'
+  | 'trash-2'
+  | 'loader-2'
+  | 'copy'
+  | 'send'
+  | 'paperclip'
 
 const UI_ICON_MAP: Record<UiIconName, LucideIcon> = {
   check: Check,
@@ -149,6 +163,12 @@ const UI_ICON_MAP: Record<UiIconName, LucideIcon> = {
   wrench: Wrench,
   maximize: Maximize2,
   minimize: Minimize2,
+  plus: Plus,
+  'trash-2': Trash2,
+  'loader-2': Loader2,
+  copy: Copy,
+  send: Send,
+  paperclip: Paperclip,
 }
 
 type AnyIconName = ToolIconName | UiIconName

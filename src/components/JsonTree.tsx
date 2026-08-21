@@ -34,8 +34,7 @@ interface JsonTreeProps {
   searchQuery?: string
   /** 当前激活的匹配序号（0-based），用于上一个/下一个跳转 */
   activeMatchIndex?: number
-  /** 点击路径或值时的回调（可选） */
-  onCopyPath?: (path: string) => void
+  /** 点击键名或值时复制对应值的回调（可选） */
   onCopyValue?: (value: string) => void
   /** 匹配结果数量变化时回调 */
   onSearchMatchCount?: (count: number) => void
@@ -76,6 +75,18 @@ function previewValue(value: unknown, maxLen = 48): string {
     return `Object{${keys.length}}`
   }
   return String(value)
+}
+
+/**
+ * 将节点值转换为可复制的 JSON 文本：字符串保留原始内容，
+ * 其余 JSON 类型使用 JSON 序列化，保证对象和数组可直接复用。
+ */
+function stringifyValue(value: unknown): string {
+  try {
+    return typeof value === 'string' ? value : JSON.stringify(value)
+  } catch {
+    return String(value)
+  }
 }
 
 /**
@@ -153,7 +164,6 @@ interface NodeProps {
   activePath: string | null
   /** 需要强制展开的路径集合 */
   expandPaths: Set<string>
-  onCopyPath?: (path: string) => void
   onCopyValue?: (value: string) => void
 }
 
@@ -170,7 +180,6 @@ function JsonNode({
   hitPaths,
   activePath,
   expandPaths,
-  onCopyPath,
   onCopyValue,
 }: NodeProps) {
   const isObject = value !== null && typeof value === 'object'
@@ -226,10 +235,10 @@ function JsonNode({
     name === undefined ? null : (
       <span
         className={`jt-key${keyMatches(name, searchQuery) ? ' jt-match' : ''}`}
-        title={`路径: ${pathStr}`}
+        title="点击复制对应值"
         onClick={(e) => {
           e.stopPropagation()
-          onCopyPath?.(pathStr)
+          onCopyValue?.(stringifyValue(value))
         }}
       >
         {typeof name === 'number' ? (
@@ -287,15 +296,7 @@ function JsonNode({
         <span
           className={`jt-value${valueMatches(value, searchQuery) ? ' jt-match' : ''}`}
           title="点击复制值"
-          onClick={() => {
-            try {
-              onCopyValue?.(
-                typeof value === 'string' ? value : JSON.stringify(value),
-              )
-            } catch {
-              onCopyValue?.(String(value))
-            }
-          }}
+          onClick={() => onCopyValue?.(stringifyValue(value))}
         >
           {renderPrimitive(value)}
         </span>
@@ -333,7 +334,6 @@ function JsonNode({
             hitPaths={hitPaths}
             activePath={activePath}
             expandPaths={expandPaths}
-            onCopyPath={onCopyPath}
             onCopyValue={onCopyValue}
           />
         ))}
@@ -352,7 +352,7 @@ function JsonNode({
  * JSON 树形可视化（风格接近 json.cn）
  * - 键/字符串/数字/布尔/null 分色
  * - 节点展开折叠
- * - 点击键复制路径，点击值复制内容
+ * - 点击键名或值复制对应内容
  * - 支持键名/路径/值搜索高亮，并自动展开到命中节点
  */
 export function JsonTree({
@@ -360,7 +360,6 @@ export function JsonTree({
   defaultExpandDepth = 2,
   searchQuery = '',
   activeMatchIndex = 0,
-  onCopyPath,
   onCopyValue,
   onSearchMatchCount,
   onSearchMatches,
@@ -425,7 +424,6 @@ export function JsonTree({
         hitPaths={hitPaths}
         activePath={activePath}
         expandPaths={expandPaths}
-        onCopyPath={onCopyPath}
         onCopyValue={onCopyValue}
       />
     </div>

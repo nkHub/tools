@@ -276,6 +276,14 @@ export const tools: ToolItem[] = [
     category: '网络信息',
     icon: 'network',
   },
+  {
+    path: '/http',
+    name: 'HTTP 请求调试',
+    shortName: 'HTTP',
+    description: '类 Postman 的请求调试：方法、URL、参数、请求头与响应查看',
+    category: '网络信息',
+    icon: 'send',
+  },
 ]
 
 /** 分类名 → 锚点 id（稳定、URL 友好） */

@@ -30,7 +30,7 @@ function sortObjectKeys(value: unknown): unknown {
 /**
  * JSON 工具（交互接近 json.cn）
  * - 左侧编辑，右侧树形可视化（展开/折叠 + 类型着色）
- * - 支持格式化、压缩、键排序、复制路径/值
+ * - 支持格式化、压缩、键排序、复制键对应的值
  * 全部在浏览器内完成
  */
 export function JsonTool() {
@@ -209,7 +209,7 @@ export function JsonTool() {
   return (
     <ToolPage
       title="JSON 工具"
-      description="实时树形可视化、类型着色、展开折叠；点击键复制路径，点击值复制内容。纯本地处理。"
+      description="实时树形可视化、类型着色、展开折叠；点击键名或值复制对应内容。纯本地处理。"
       badge="离线"
     >
       <div className="panel">
@@ -395,9 +395,6 @@ export function JsonTool() {
                 activeMatchIndex={matchIndex}
                 onSearchMatchCount={setMatchCount}
                 onSearchMatches={setMatchPaths}
-                onCopyPath={(p) => {
-                  void copy(p)
-                }}
                 onCopyValue={(v) => {
                   void copy(v)
                 }}
@@ -413,7 +410,7 @@ export function JsonTool() {
 
           <p className="status-info" style={{ margin: 0 }}>
             提示：树形模式下可搜索键/值，用 ↑↓ 或 Enter / Shift+Enter 在匹配间跳转；点击
-            <strong>键名</strong>复制路径，点击<strong>值</strong>复制内容。
+            <strong>键名</strong>或<strong>值</strong>可复制对应内容。
             {matchPaths.length > 0 && searchQuery.trim()
               ? ` 当前：${matchPaths[Math.min(matchIndex, matchPaths.length - 1)]}`
               : ''}

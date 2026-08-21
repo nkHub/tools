@@ -33,6 +33,7 @@ import { FingerprintTool } from './pages/FingerprintTool'
 import { TimestampTool } from './pages/TimestampTool'
 import { IpTool } from './pages/IpTool'
 import { PortTool } from './pages/PortTool'
+import { HttpTool } from './pages/HttpTool'
 
 /**
  * 应用路由入口
@@ -76,6 +77,7 @@ export default function App() {
           <Route path="timestamp" element={<TimestampTool />} />
           <Route path="ip" element={<IpTool />} />
           <Route path="ports" element={<PortTool />} />
+          <Route path="http" element={<HttpTool />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>
